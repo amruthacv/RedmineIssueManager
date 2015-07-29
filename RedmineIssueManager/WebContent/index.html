@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <script language="javascript">
+    var xmlhttp;
+    function init() {
+       // put more code here in case you are concerned about browsers that do not provide XMLHttpRequest object directly
+       xmlhttp = new XMLHttpRequest();
+    }
+    function getdetails() {
+        var choice = document.getElementById("choice");
+        var url = "http://localhost:8080/RedmineIssueManager/crunchify/redmine/" + choice.value;
+        xmlhttp.open('GET',url,true);
+        xmlhttp.send(null);
+        xmlhttp.onreadystatechange = function() {
+
+               var issuename =  document.getElementById("issuename");
+               var issueid =  document.getElementById("issueid");
+               if (xmlhttp.readyState == 4) {
+                  if ( xmlhttp.status == 200) {
+                       var det = eval( "(" +  xmlhttp.responseText + ")");
+                       details1.value=det.details;
+                       
+                       
+                 }
+                 else
+                       alert("Error ->" + xmlhttp.responseText);
+              }
+        };
+    }
+    function excelupdate() {
+        
+        var y=document.getElementById("f");
+        document.getElementById("d").innerHTML=y.value;
+        var url = "http://localhost:8080/RedmineIssueManager/crunchify/redmine1/"+y.value ;
+        xmlhttp.open('GET',url,true);
+        xmlhttp.send(null);
+        xmlhttp.onreadystatechange = function() {
+        	var x = "ticket created";
+            document.getElementById("demo").innerHTML = x;
+              
+        };
+    }
+  
+function uploadfile() {
+        
+        var z=document.getElementById("f");
+       if(z.value=="")
+    	   {
+    	   alert("File not uploaded");
+    	   }
+       else
+    	   {
+    	   alert("File uploaded successfully");
+    	   }
+        
+    }
+    
+    
+  </script>
+  </head>
+<body onload="init()">
+	<h1>Project Estimation </h1>
+   <table>
+     <tr>
+     <textarea rows="4" cols="50" id=details1 ></textarea> 
+      <td>Enter project name :  
+      <input type="text" id="choice" size="10"/>  <input type="button" value="Get Details" onclick="getdetails()"/></td>
+       
+    </tr>
+  
+   <tr>
+   <td>Click on the button to update issues from excel file: </td>
+    <td>  <input type="button" value="Excel update" onclick="excelupdate()"/> </td>
+   </tr>
+   <tr>
+    <p id="d"></p>
+   </tr>
+   <p id="demo"></p>
+   </table>
+  <h3>File Upload:</h3>
+Select a file to upload: <br />
+ 
+	<form action="rest/file/upload" method="post" enctype="multipart/form-data">
+ 
+	   <p>
+		Select a file : <input type="file" name="file" id="f" size="45" />
+	   </p>
+ 
+	   <input type="submit" value="Upload File" onclick="uploadfile()"/>
+	</form>
+ 
+</body>
+<script src="path">
+</script>
+</html>
